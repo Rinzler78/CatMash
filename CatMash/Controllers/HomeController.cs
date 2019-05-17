@@ -12,33 +12,27 @@ namespace CatMash.Controllers
 {
     public class HomeController : Controller
     {
-        // GET: /<controller>/
+        readonly ICatMashRepository CatsRepository;
+        public HomeController(ICatMashRepository catsRepository)
+        {
+            CatsRepository = catsRepository;
+        }
+
         public IActionResult Index()
         {
             return View();
         }
 
-        public async Task<Cat[]> AllCats()
+        public async Task<IReadOnlyList<Cat>> AllCats()
         {
-            var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync("https://latelier.co/data/cats.json");
-
-            //will throw an exception if not successful
-            response.EnsureSuccessStatusCode();
-
-            string content = await response.Content.ReadAsStringAsync();
-
-            var dico = JsonConvert.DeserializeObject<Dictionary<string, Cat[]>>(content);
-
-            return dico["images"];
+            await CatsRepository.Load();
+            return CatsRepository.Cats;
         }
-    }
 
-    public class Cat
-    {
-        [JsonProperty("id")]
-        public string Id { get; set; }
-        [JsonProperty("url")]
-        public string Url { get; set; }
+        [HttpPost]
+        public bool Vote(string id)
+        {
+            return false;
+        }
     }
 }
