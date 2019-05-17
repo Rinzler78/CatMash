@@ -1,0 +1,40 @@
+﻿<Properties StartupConfiguration="{25B8B7D5-4D79-46F6-ADD3-356AC90DD66F}|Default">
+  <MonoDevelop.Ide.ItemProperties.CatMash PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="CatMash/Controllers/HomeController.cs">
+    <Files>
+      <File FileName="CatMash/Startup.cs" Line="39" Column="33" />
+      <File FileName="CatMash/Pages/Index.cshtml" Line="2" Column="16" />
+      <File FileName="CatMash/Properties/launchSettings.json" Line="20" Column="29" />
+      <File FileName="CatMash/wwwroot/css/Index.css" Line="15" Column="31" />
+      <File FileName="CatMash/Program.cs" Line="17" Column="1" />
+      <File FileName="CatMash/wwwroot/js/Index.js" Line="2" Column="25" />
+      <File FileName="CatMash/Controllers/HomeController.cs" Line="1" Column="1" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="CatMash" expanded="True">
+            <Node name="CatMash" expanded="True">
+              <Node name="Controllers" expanded="True" />
+              <Node name="Pages" expanded="True" />
+              <Node name="Properties" expanded="True" />
+              <Node name="wwwroot" expanded="True">
+                <Node name="css" expanded="True" />
+                <Node name="js" expanded="True" />
+              </Node>
+              <Node name="Startup.cs" selected="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore>
+      <Breakpoint file="/Users/bleclereperso/Projects/CatMash/CatMash/IndexController.cs" relfile="CatMash/IndexController.cs" line="16" column="1" />
+    </BreakpointStore>
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>
