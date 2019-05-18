@@ -7,7 +7,7 @@ window.onload = function() {
     console.log("Loaded");
     
     $.ajax({
-       url : 'http://localhost:5000/CatMash/AllCats', 
+       url : baseuri + "/AllCats", 
        type : 'GET', 
        dataType : 'json',
        success : function(data, statut){
@@ -89,7 +89,7 @@ function onImageClicked(id)
     ++opponentCat.nbMash;
    
     $.ajax({
-        url : "http://localhost:5000/CatMash/Rate?winnerId="+winnerCat.id+"&opponentId="+opponentCat.id,
+        url : baseuri + "/Rate?winnerId="+winnerCat.id+"&opponentId="+opponentCat.id,
        type : 'POST',
        dataType : 'json',
        success : function(data, statut){

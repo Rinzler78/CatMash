@@ -5,7 +5,7 @@ window.onload = function() {
     console.log("Loaded");
     
     $.ajax({
-       url : 'http://localhost:5000/CatMash/AllCats', // Le nom du script a changé, c'est send_mail.php maintenant !
+       url : baseuri + "/AllCats", // Le nom du script a changé, c'est send_mail.php maintenant !
        type : 'GET', // Le type de la requête HTTP, ici devenu POST
        dataType : 'json',
        success : function(data, statut){
