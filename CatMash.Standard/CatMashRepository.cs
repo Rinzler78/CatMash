@@ -7,6 +7,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Linq;
+using System.Reflection;
+using CatMash.Standard;
 
 namespace CatMash
 {
@@ -29,23 +31,15 @@ namespace CatMash
             return LoadTask;
         }
 
-        const string LAtelierCatsUrl = "https://latelier.co/data/cats.json";
-
         IReadOnlyList<Cat> ICatMashRepository.Cats => CatsList;
 
         Task LoadTaskRoutine()
         {
-            return Task.Run(async () =>
+            return Task.Run(() =>
             {
                 try
                 {
-                    var httpClient = new HttpClient();
-                    var response = await httpClient.GetAsync(LAtelierCatsUrl);
-
-                    //will throw an exception if not successful
-                    response.EnsureSuccessStatusCode();
-
-                    string content = await response.Content.ReadAsStringAsync();
+                    string content = Assembly.GetExecutingAssembly().ReadToEnd("cats.json");
 
                     var dico = JsonConvert.DeserializeObject<Dictionary<string, Cat[]>>(content);
 
