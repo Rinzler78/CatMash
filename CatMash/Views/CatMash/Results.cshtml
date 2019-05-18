@@ -1,0 +1,41 @@
+﻿@page
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dynamically Populate List Items</title>
+    <style>
+        h1 {
+            font-family: sans-serif;
+            font-size: 64px;
+            color: #CCC;
+            padding: 5px;
+            margin: 5px;
+        }
+
+        ul {
+            padding: 0;
+            margin: 10px;
+        }
+
+        li {
+            font-family: sans-serif;
+            background-color: gold;
+            float: left;
+            clear: both;
+            padding: 5px;
+            list-style-type: none;
+            margin: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Cats results</h1>
+    <ul id="CatsList"></ul>
+    <script type="text/javascript" src="~/js/Results.js"></script>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+</body>
+
+</html>

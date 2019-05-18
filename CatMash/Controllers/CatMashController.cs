@@ -10,15 +10,20 @@ using Newtonsoft.Json;
 
 namespace CatMash.Controllers
 {
-    public class HomeController : Controller
+    public class CatMashController : Controller
     {
         readonly ICatMashRepository CatsRepository;
-        public HomeController(ICatMashRepository catsRepository)
+        public CatMashController(ICatMashRepository catsRepository)
         {
             CatsRepository = catsRepository;
         }
 
         public IActionResult Index()
+        {
+            return View();
+        }
+
+        public IActionResult Results()
         {
             return View();
         }
@@ -29,10 +34,9 @@ namespace CatMash.Controllers
             return CatsRepository.Cats;
         }
 
-        [HttpPost]
-        public bool Vote(string id)
+        public int Rate(string winnerId, string opponentId)
         {
-            return false;
+            return CatsRepository.Rate(winnerId, opponentId);
         }
     }
 }

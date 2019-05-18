@@ -9,5 +9,6 @@ namespace CatMash
         bool IsLoaded { get; }
         Task Load(bool force = false);
         IReadOnlyList<Cat> Cats { get; }
+        int Rate(string winnerId, string opponentId);
     }
 }

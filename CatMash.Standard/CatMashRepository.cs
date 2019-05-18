@@ -1,8 +1,12 @@
-﻿using System;
+﻿#if DEBUG
+#define SHORT_LIST
+#endif
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.Linq;
 
 namespace CatMash
 {
@@ -50,7 +54,15 @@ namespace CatMash
                     lock (CatsList)
                     {
                         CatsList.Clear();
-                        CatsList.AddRange(array);
+
+                        var cats =
+#if SHORT_LIST
+                        array.Take(5);
+#else
+                        array;
+#endif
+
+                        CatsList.AddRange(cats);
                     }
                 }
                 catch (Exception ex)
@@ -58,6 +70,41 @@ namespace CatMash
 
                 }
             });
+        }
+
+        public int Rate(string winnerId, string opponentId)
+        {
+            Cat winnerCat, againstCat;
+
+            lock (CatsList)
+            {
+                winnerCat = CatsList.FirstOrDefault(arg => arg.Id == winnerId);
+                againstCat = CatsList.FirstOrDefault(arg => arg.Id == opponentId);
+            }
+
+            if (winnerCat != null && againstCat != null)
+            {
+                ++winnerCat.Rate;
+
+                ++winnerCat.NbMash;
+                ++againstCat.NbMash;
+
+                return winnerCat.Rate;
+            }
+
+            return -1;
+        }
+
+        public void ClearVotes()
+        {
+            lock (CatsList)
+            {
+                CatsList.ForEach(arg =>
+                {
+                    arg.Rate = 0;
+                    arg.NbMash = 0;
+                });
+            }
         }
     }
 }

@@ -16,7 +16,7 @@
     <Folder Include="wwwroot\js\" />
     <Folder Include="Controllers\" />
     <Folder Include="Views\" />
-    <Folder Include="Views\Home\" />
+    <Folder Include="Views\CatMash\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\CatMash logo.png" />
