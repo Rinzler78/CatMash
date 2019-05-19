@@ -1,5 +1,4 @@
-﻿var nbCats = 0;
-var cats = [];
+﻿var cats = [];
 
 window.onload = function() {
     console.log("Loaded");
@@ -12,14 +11,8 @@ window.onload = function() {
            console.log("Success");
 
            cats = data;
-           nbCats = data.length;
 
-            for (var i = 0; i < cats.length; i++) {
-                var cat = cats[i];
-
-                var ul = document.getElementById("CatsList");
-                ul.appendChild(createCatListItem(cat));
-            }
+           populateCats();
        },
 
        error : function(resultat, statut, erreur){
@@ -31,6 +24,21 @@ window.onload = function() {
        }
        });
 };
+
+function populateCats()
+{
+    var ul = document.getElementById("CatsList");
+
+    cats = cats.sort(function(cat1, cat2){
+        return cat2.rate - cat1.rate;
+    });
+
+    for (var i = 0; i < cats.length; i++) {
+        var cat = cats[i];
+        
+        ul.appendChild(createCatListItem(cat));
+    }
+}
 
 function createCatListItem(cat)
 {

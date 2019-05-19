@@ -31,11 +31,6 @@ namespace CatMash
                 app.UseDeveloperExceptionPage();
             }
 
-            //app.Run(async (context) =>
-            //{
-            //    await context.Response.WriteAsync("Hello World!");
-            //});
-
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
