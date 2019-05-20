@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using CatMash.ClientManager;
+using CatMash.Repository;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -13,9 +15,11 @@ namespace CatMash.Controllers
     public class CatMashController : Controller
     {
         readonly ICatMashRepository CatsRepository;
-        public CatMashController(ICatMashRepository catsRepository)
+        readonly ICatMashClientManager CatMashClientManager;
+        public CatMashController(ICatMashRepository catsRepository, ICatMashClientManager catMashClientManager)
         {
             CatsRepository = catsRepository;
+            CatMashClientManager = catMashClientManager;
         }
 
         public IActionResult Index()
@@ -36,7 +40,11 @@ namespace CatMash.Controllers
 
         public int Rate(string winnerId, string opponentId)
         {
-            return CatsRepository.Rate(winnerId, opponentId);
+            var result = CatsRepository.Rate(winnerId, opponentId);
+
+            CatMashClientManager.NotifyRate(winnerId, opponentId);
+
+            return result;
         }
     }
 }

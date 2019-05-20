@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace CatMash
+namespace CatMash.Repository
 {
     public interface ICatMashRepository
     {

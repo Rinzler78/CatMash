@@ -8,9 +8,8 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Reflection;
-using CatMash.Standard;
 
-namespace CatMash
+namespace CatMash.Repository
 {
     public class CatMashRepository : ICatMashRepository
     {

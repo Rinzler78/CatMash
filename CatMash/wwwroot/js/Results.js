@@ -3,6 +3,11 @@
 window.onload = function() {
     console.log("Loaded");
     
+    initWebSocketLink();
+};
+
+function updateCats()
+{
     $.ajax({
        url : baseuri + "/AllCats", // Le nom du script a changé, c'est send_mail.php maintenant !
        type : 'GET', // Le type de la requête HTTP, ici devenu POST
@@ -22,8 +27,8 @@ window.onload = function() {
        complete : function(resultat, statut){
            console.log("Completed");
        }
-       });
-};
+    });
+}
 
 function populateCats()
 {
@@ -32,6 +37,10 @@ function populateCats()
     cats = cats.sort(function(cat1, cat2){
         return cat2.rate - cat1.rate;
     });
+    
+    while (ul.firstChild) {
+        ul.removeChild(ul.firstChild);
+    }
 
     for (var i = 0; i < cats.length; i++) {
         var cat = cats[i];
@@ -55,4 +64,52 @@ function createCatListItem(cat)
     li.appendChild(img);
 
     return li;
+}
+
+//Web Sockets
+var catMashWebSocket = null;
+function initWebSocketLink()
+{
+    if(catMashWebSocket != null && catMashWebSocket.readyState == 0)
+        return;
+
+    catMashWebSocket = new WebSocket(webSocketUri);
+
+    catMashWebSocket.onopen = function (event) {
+        console.log("Ws opened");
+        updateCats();
+    };
+
+    catMashWebSocket.onclose = function (event) {
+        console.log("Ws closed");
+        initWebSocketLink();
+    };
+
+    catMashWebSocket.onerror = function (event) {
+        console.log("Ws error");
+        initWebSocketLink();
+    };
+
+    catMashWebSocket.onmessage = function (event) {
+        console.log("Ws onmessage " + event.data);
+
+        var array = event.data.split(":");
+        var winnerId = array[0];
+        var opponentId = array[1];
+
+        var winnerCat = cats.find(function(a){
+            return a.id == winnerId;
+        });
+
+        var opponentCat = cats.find(function(a){
+            return a.id == opponentId;
+        });
+
+        ++winnerCat.rate;
+
+        ++winnerCat.nbMash;
+        ++opponentCat.nbMash;
+
+        populateCats();
+    };
 }
