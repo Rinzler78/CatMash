@@ -40,6 +40,9 @@ namespace CatMash.Controllers
 
         public int Rate(string winnerId, string opponentId)
         {
+            if (string.IsNullOrEmpty(winnerId) || string.IsNullOrEmpty(opponentId))
+                return -1;
+
             var result = CatsRepository.Rate(winnerId, opponentId);
 
             CatMashClientManager.NotifyRate(winnerId, opponentId);
