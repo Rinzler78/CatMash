@@ -7,7 +7,7 @@ trigger:
 - master
 
 pool:
-  vmImage: 'ubuntu-latest'
+  vmImage: 'macos-latest'
 
 variables:
   solution: '**/*.sln'
@@ -36,7 +36,7 @@ steps:
 - task: AzureRmWebAppDeployment@4
   inputs:
     ConnectionType: 'AzureRM'
-    azureSubscription: 'Free Trial(280f4506-916f-4b31-9009-7fd38ad90b4e)'
+    azureSubscription: 'Free Trial(280f4506-916f-4b31-9009-7fd38ad90b4e)'
     appType: 'webApp'
     WebAppName: 'RinzlerCatMash'
     packageForLinux: '$(build.artifactStagingDirectory)/**/*.zip'
