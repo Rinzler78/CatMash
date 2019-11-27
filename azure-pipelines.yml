@@ -28,16 +28,15 @@ steps:
     platform: '$(buildPlatform)'
     configuration: '$(buildConfiguration)'
 
-- task: VSTest@2
-  inputs:
-    platform: '$(buildPlatform)'
-    configuration: '$(buildConfiguration)'
+- task: VSTest@2
+  inputs:
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
 
-
-- task: AzureRmWebAppDeployment@4
-  inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Free Trial(280f4506-916f-4b31-9009-7fd38ad90b4e)'
-    appType: 'webApp'
-    WebAppName: 'RinzlerCatMash'
-    packageForLinux: '$(build.artifactStagingDirectory)/**/*.zip'
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Free Trial(280f4506-916f-4b31-9009-7fd38ad90b4e)'
+    appType: 'webApp'
+    WebAppName: 'RinzlerCatMash'
+    packageForLinux: '$(build.artifactStagingDirectory)/**/*.zip'
