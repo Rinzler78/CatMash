@@ -35,13 +35,6 @@ steps:
 
 - task: AzureRmWebAppDeployment@4
   inputs:
-    ConnectionType: 'AzureRM'
-    azureSubscription: 'Free Trial(280f4506-916f-4b31-9009-7fd38ad90b4e)'
-    appType: 'webApp'
-    WebAppName: 'RinzlerCatMash'
-    deployToSlotOrASE: true
-    ResourceGroupName: 'CatMash'
-    SlotName: 'production'
+    ConnectionType: 'PublishProfile'
+    PublishProfilePath: '$(System.DefaultWorkingDirectory)/**/*.pubxml'
     packageForLinux: '$(System.DefaultWorkingDirectory)/**/*.zip'
-    enableCustomDeployment: true
-    DeploymentType: 'webDeploy'
