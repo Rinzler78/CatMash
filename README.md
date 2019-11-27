@@ -1,7 +1,7 @@
 # CatMash
 
 Mash can be done at :
-http://catmashrinzler.azurewebsites.net/
+http://Rinzlercatmash.azurewebsites.net/
 
 Results can be found at :
-http://catmashrinzler.azurewebsites.net/CatMash/Results
+http://Rinzlercatmash.azurewebsites.net/CatMash/Results
