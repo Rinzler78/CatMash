@@ -111,5 +111,7 @@ function initWebSocketLink()
         ++opponentCat.nbMash;
 
         populateCats();
+
+        PlayRankUpdateSound();
     };
 }

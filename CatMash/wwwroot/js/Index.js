@@ -84,6 +84,8 @@ function onImageClicked(id)
         opponentCat = cats[leftCatIndex];
     }
 
+    PlayCatSelectedSound();
+
     ++winnerCat.rate;
     ++winnerCat.nbMash;
     ++opponentCat.nbMash;

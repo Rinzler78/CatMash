@@ -15,6 +15,7 @@
     <Folder Include="Controllers\" />
     <Folder Include="Views\" />
     <Folder Include="Views\CatMash\" />
+    <Folder Include="wwwroot\sounds\" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
