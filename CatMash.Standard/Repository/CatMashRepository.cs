@@ -11,26 +11,17 @@ using System.Reflection;
 using CatMash.DataStore.EF.SQLite;
 using CatMash.DataStore.EF;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace CatMash.Repository
 {
     public class CatMashRepository : ICatMashRepository
     {
-        readonly CatMashDbContext CatMashDbContext = new CatMashSQLiteDbContext();
+        readonly CatMashDbContext CatMashDbContext;
 
-        public CatMashRepository()
+        public CatMashRepository(CatMashDbContext catMashDbContext)
         {
-            Load();
-        }
-
-        public bool IsLoaded { get; private set; }
-
-        Task LoadTask;
-        public Task Load(bool force = false)
-        {
-            if ((!IsLoaded || force) && (LoadTask?.IsCompleted ?? true))
-                LoadTask = LoadTaskRoutine();
-            return LoadTask;
+            CatMashDbContext = catMashDbContext;
         }
 
         IReadOnlyList<Cat> ICatMashRepository.Cats
@@ -52,117 +43,36 @@ namespace CatMash.Repository
             }
         }
 
-
-        Task LoadTaskRoutine()
-        {
-            return Task.Run(async () =>
-            {
-                try
-                {
-                    lock (CatMashDbContext)
-                    {
-                        CatMashDbContext.Database.Migrate();
-                    }
-
-                    string content = Assembly.GetExecutingAssembly().ReadToEnd("cats.json");
-
-                    var dico = JsonConvert.DeserializeObject<Dictionary<string, Cat[]>>(content);
-
-                    var array = dico["images"];
-
-
-                    var cats =
-#if SHORT_LIST
-                        array.Take(5);
-#else
-                        array;
-#endif
-                    lock (CatMashDbContext)
-                    {
-                        foreach (var cat in cats)
-                        {
-                            var existingImage = CatMashDbContext.Images.FirstOrDefault(arg => arg.URL == cat.Url);
-
-                            if (existingImage == null)
-                                CatMashDbContext.Images.Add(new CatMash.DataStore.Image
-                                {
-                                    URL = cat.Url
-                                });
-
-                            var existingCat = CatMashDbContext.Cats.FirstOrDefault(arg => arg.Name == cat.Id);
-
-                            if (existingCat == null)
-                            {
-                                existingCat = new CatMash.DataStore.Cat
-                                {
-                                    Image = existingImage,
-                                    Name = cat.Id
-                                };
-
-                                CatMashDbContext.Cats.Add(existingCat);
-                            }
-                            else
-                                existingCat.Image = existingImage;
-                        }
-
-                        CatMashDbContext.SaveChanges();
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex);
-                }
-
-                IsLoaded = true;
-            });
-        }
-
         public int Rate(string winnerId, string opponentId)
         {
-            CatMash.DataStore.Cat winnerCat, againstCat;
+            Debug.WriteLine($"Rate : Winner ({winnerId}) <=> Opponent ({opponentId})");
+
+            CatMash.DataStore.Cat winnerCat, opponentCat;
 
             lock (CatMashDbContext)
             {
                 var cats = CatMashDbContext.Cats.Where(arg => arg.Name == winnerId || arg.Name == opponentId);
 
                 winnerCat = cats.FirstOrDefault(arg => arg.Name == winnerId);
-                againstCat = cats.FirstOrDefault(arg => arg.Name == opponentId);
-            }
+                opponentCat = cats.FirstOrDefault(arg => arg.Name == opponentId);
 
-            if (winnerCat != null && againstCat != null)
-            {
-                ++winnerCat.Rate;
 
-                ++winnerCat.NbMash;
-                ++againstCat.NbMash;
+                if (winnerCat != null && opponentCat != null)
+                {
+                    ++winnerCat.Rate;
 
-                CatMashDbContext.SaveChanges();
+                    ++winnerCat.NbMash;
+                    ++opponentCat.NbMash;
 
-                return winnerCat.Rate;
+                    Debug.WriteLine($"Rate :\n- Winner ({winnerCat})\n- Opponent ({opponentCat})");
+
+                    CatMashDbContext.SaveChanges();
+
+                    return winnerCat.Rate;
+                }
             }
 
             return -1;
-        }
-
-        public void ClearVotes()
-        {
-            lock (CatMashDbContext)
-            {
-                var mashs = CatMashDbContext.Mash.ToList();
-
-                mashs.ForEach(arg =>
-                {
-                    arg.LeftCat.NbMash = 0;
-                    arg.LeftCat.Rate = 0;
-
-                    arg.RightCat.NbMash = 0;
-                    arg.RightCat.Rate = 0;
-                });
-
-                CatMashDbContext.Mash.RemoveRange(mashs);
-
-                CatMashDbContext.SaveChanges();
-            }
         }
     }
 }

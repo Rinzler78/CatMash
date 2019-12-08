@@ -34,7 +34,6 @@ namespace CatMash.Controllers
 
         public async Task<IReadOnlyList<Cat>> AllCats()
         {
-            await CatsRepository.Load();
             return CatsRepository.Cats;
         }
 

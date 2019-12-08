@@ -5,16 +5,48 @@ using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
 using CatMash.ClientManager;
+using CatMash.DataStore.EF;
+using CatMash.DataStore.EF.SQLite;
 using CatMash.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace CatMash
 {
+    public static class StarupExt
+    {
+        public static void ConfigureCatMashServices(this IServiceCollection services, IConfiguration Configuration)
+        {
+            services.AddSingleton<CatMashDbContext, CatMashSQLiteDbContext>(_ => new CatMashSQLiteDbContext());
+            services.AddSingleton<ICatMashRepository, CatMashRepository>();
+            services.AddSingleton<ICatMashClientManager, CatMashClientManager>();
+        }
+
+        static Task _InitCatMashTask;
+        public static Task InitCatMash(this IApplicationBuilder app)
+        {
+            if (_InitCatMashTask?.IsCompleted ?? true)
+            {
+                _InitCatMashTask = Task.Run(async () =>
+                {
+                    var dbContext = app.ApplicationServices.GetService<CatMashDbContext>();
+
+                    if (dbContext != null)
+                    {
+                        if (await dbContext.Init())
+                            dbContext.Populate();
+                    }
+                });
+            }
+            return _InitCatMashTask;
+        }
+    }
+
     public class Startup
     {
         // This method gets called by the runtime. Use this method to add services to the container.
@@ -23,8 +55,7 @@ namespace CatMash
         {
             services.AddControllersWithViews();
 
-            services.AddSingleton<ICatMashRepository, CatMashRepository>();
-            services.AddSingleton<ICatMashClientManager, CatMashClientManager>();
+            services.ConfigureCatMashServices(null);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -88,6 +119,8 @@ namespace CatMash
                     name: "default",
                     pattern: "{controller=CatMash}/{action=Index}/{id?}");
             });
+
+            app.InitCatMash().Wait();
         }
 
         //private async Task Echo(HttpContext context, WebSocket webSocket)

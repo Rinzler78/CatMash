@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net.WebSockets;
 using System.Text;
 using System.Threading;
@@ -18,7 +19,7 @@ namespace CatMash.ClientManager
 
         public async Task Start()
         {
-            Console.WriteLine($"Client Start");
+            Debug.WriteLine($"Client Start");
 
             var buffer = new byte[1024 * 4];
             WebSocketReceiveResult result = null;

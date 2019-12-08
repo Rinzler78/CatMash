@@ -21,6 +21,9 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CatMash.Standard\CatMash.Standard.csproj" />
+    <ProjectReference Include="..\DataStore\EF\CatMash.DataStore.EF\CatMash.DataStore.EF.csproj">
+      <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.0">

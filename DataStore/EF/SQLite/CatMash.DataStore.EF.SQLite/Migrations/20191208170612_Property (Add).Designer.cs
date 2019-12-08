@@ -3,14 +3,16 @@ using System;
 using CatMash.DataStore.EF.SQLite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace CatMash.DataStore.EF.SQLite.Migrations
 {
     [DbContext(typeof(CatMashSQLiteDbContext))]
-    partial class CatMashSQLiteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20191208170612_Property (Add)")]
+    partial class PropertyAdd
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

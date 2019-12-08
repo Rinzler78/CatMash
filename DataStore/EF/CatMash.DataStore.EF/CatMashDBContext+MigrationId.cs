@@ -1,9 +1,9 @@
 using System;
 namespace CatMash.DataStore.EF
 {
-    public partial class CatMashDBContext
+    public abstract partial class CatMashDbContext
     {
         /** Auto generated using migration script */
-public static readonly string MigrationId = "4AD23D26-AD24-4E11-9F3F-8051BD1DAEBA";
+public static readonly string MigrationId = "A07C1225-057D-483F-9868-596F37113499";
     }
 }

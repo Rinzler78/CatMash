@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.WebSockets;
 using System.Threading;
@@ -41,7 +42,7 @@ namespace CatMash.ClientManager
                 client.Closed += Client_Closed;
                 CatMashClients.Add(client);
 
-                Console.WriteLine($"Add client => {CatMashClients.Count}");
+                Debug.WriteLine($"Add client => {CatMashClients.Count}");
 
                 return client;
             }
@@ -59,7 +60,7 @@ namespace CatMash.ClientManager
 
                     CatMashClients.Remove(client);
 
-                    Console.WriteLine($"Remove client => {CatMashClients.Count}");
+                    Debug.WriteLine($"Remove client => {CatMashClients.Count}");
                 }
             }
         }
