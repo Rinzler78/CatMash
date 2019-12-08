@@ -77,11 +77,13 @@ function initWebSocketLink()
 
     catMashWebSocket.onopen = function (event) {
         console.log("Ws opened");
+        PlayConnectedSound();
         updateCats();
     };
 
     catMashWebSocket.onclose = function (event) {
         console.log("Ws closed");
+        PlayDisconnectedSound();
         initWebSocketLink();
     };
 

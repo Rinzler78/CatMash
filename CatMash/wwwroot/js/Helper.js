@@ -7,6 +7,14 @@ function PlaySound(melody) {
     snd.play();
 }
 
+function PlayConnectedSound() {
+    PlaySound('connected');
+}
+
+function PlayDisconnectedSound() {
+    PlaySound('disconnected');
+}
+
 function PlayRankUpdateSound() {
     PlaySound('rateSound');
 }
