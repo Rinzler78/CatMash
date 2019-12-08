@@ -101,10 +101,10 @@ function EFAdd(){
 
     dotnet add $StartupProjectDirPath reference $projetPath
     
-    echo "Restore packages => dotnet restore $StartupProjectName/$StartupProjectName.csproj"
+    echo "** EFAdd : Restore packages => dotnet restore $StartupProjectName/$StartupProjectName.csproj"
     dotnet restore $StartupProjectDirPath
     
-    echo "Restore start Migration => dotnet ef migrations add "$name" --project $DBContextSourceProject --startup-project $StartupProjectName/$StartupProjectName.csproj --verbose"
+    echo "** EFAdd : Start Migration => dotnet ef migrations add "$name" --project $DBContextSourceProject --startup-project $StartupProjectName/$StartupProjectName.csproj --verbose"
     
     dotnet ef migrations add "$name" --project $DBContextSourceProject --startup-project $StartupProjectDirPath --verbose
 }
