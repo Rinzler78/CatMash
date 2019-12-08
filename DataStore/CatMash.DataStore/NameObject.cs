@@ -1,0 +1,11 @@
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+
+namespace CatMash.DataStore
+{
+    public class NameObject : DBObject
+    {
+        [Key]
+        public string Name { get; set; }
+    }
+}
