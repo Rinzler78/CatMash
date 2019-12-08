@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Linq;
 using System.Reflection;
-using CatMash.SQLite;
+using CatMash.DataStore.EF.SQLite;
+using CatMash.DataStore.EF;
 using Microsoft.EntityFrameworkCore;
 
 namespace CatMash.Repository
@@ -38,13 +39,15 @@ namespace CatMash.Repository
             {
                 lock (CatMashDbContext)
                 {
-                    return CatMashDbContext.Cats.Select(arg => new Cat
+                    var result = CatMashDbContext.Cats.Include(arg => arg.Image).Select(arg => new Cat
                     {
                         Id = arg.Name,
                         NbMash = (ushort)arg.NbMash,
                         Rate = (ushort)arg.Rate,
                         Url = arg.Image.URL
                     }).ToList();
+
+                    return result;
                 }
             }
         }
@@ -52,7 +55,7 @@ namespace CatMash.Repository
 
         Task LoadTaskRoutine()
         {
-            return Task.Run(() =>
+            return Task.Run(async () =>
             {
                 try
                 {
@@ -81,7 +84,7 @@ namespace CatMash.Repository
                             var existingImage = CatMashDbContext.Images.FirstOrDefault(arg => arg.URL == cat.Url);
 
                             if (existingImage == null)
-                                CatMashDbContext.Images.Add(new SQLite.Image
+                                CatMashDbContext.Images.Add(new CatMash.DataStore.Image
                                 {
                                     URL = cat.Url
                                 });
@@ -89,24 +92,34 @@ namespace CatMash.Repository
                             var existingCat = CatMashDbContext.Cats.FirstOrDefault(arg => arg.Name == cat.Id);
 
                             if (existingCat == null)
-                                CatMashDbContext.Cats.Add(new SQLite.Cat
+                            {
+                                existingCat = new CatMash.DataStore.Cat
                                 {
                                     Image = existingImage,
                                     Name = cat.Id
-                                });
+                                };
+
+                                CatMashDbContext.Cats.Add(existingCat);
+                            }
+                            else
+                                existingCat.Image = existingImage;
                         }
+
+                        CatMashDbContext.SaveChanges();
                     }
                 }
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex);
                 }
+
+                IsLoaded = true;
             });
         }
 
         public int Rate(string winnerId, string opponentId)
         {
-            CatMash.SQLite.Cat winnerCat, againstCat;
+            CatMash.DataStore.Cat winnerCat, againstCat;
 
             lock (CatMashDbContext)
             {
@@ -122,6 +135,8 @@ namespace CatMash.Repository
 
                 ++winnerCat.NbMash;
                 ++againstCat.NbMash;
+
+                CatMashDbContext.SaveChanges();
 
                 return winnerCat.Rate;
             }
@@ -145,6 +160,8 @@ namespace CatMash.Repository
                 });
 
                 CatMashDbContext.Mash.RemoveRange(mashs);
+
+                CatMashDbContext.SaveChanges();
             }
         }
     }

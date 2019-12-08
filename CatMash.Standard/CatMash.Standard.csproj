@@ -14,4 +14,7 @@
   <ItemGroup>
     <EmbeddedResource Include="cats.json" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataStore\EF\SQLite\CatMash.DataStore.EF.SQLite\CatMash.DataStore.EF.SQLite.csproj" />
+  </ItemGroup>
 </Project>
