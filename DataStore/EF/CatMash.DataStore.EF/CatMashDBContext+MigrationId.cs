@@ -1,5 +1,5 @@
 using System;
-namespace CatMash.DataSTore.EF
+namespace CatMash.DataStore.EF
 {
     public partial class CatMashDBContext
     {

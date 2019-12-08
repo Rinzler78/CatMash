@@ -5,6 +5,14 @@ using Microsoft.EntityFrameworkCore.Sqlite.Infrastructure.Internal;
 
 namespace CatMash.DataStore.EF.SQLite
 {
+    public static class DBContextExt
+    {
+        public static DbContextOptions GetOptions(this string dbPath)
+        {
+            return SqliteDbContextOptionsBuilderExtensions.UseSqlite(new DbContextOptionsBuilder(), dbPath).Options;
+        }
+    }
+
     public class CatMashSQLiteDbContext : CatMashDbContext
     {
         public CatMashSQLiteDbContext()

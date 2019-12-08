@@ -18,6 +18,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CatMash.DataStore.EF.SQLite\CatMash.DataStore.EF.SQLite.csproj" />
+    <ProjectReference Include="..\..\CatMash.DataStore.EF\CatMash.DataStore.EF.csproj" />
   </ItemGroup>
 
+  <Import Project="..\..\EF.Migrations.Helper.NetCore.Shared\EF.Migrations.Helper.NetCore.Shared.projitems" Label="Shared" Condition="Exists('..\..\EF.Migrations.Helper.NetCore.Shared\EF.Migrations.Helper.NetCore.Shared.projitems')" />
 </Project>
