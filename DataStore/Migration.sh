@@ -4,7 +4,7 @@ Command="$1"
 Name="$2"
 Date=$(date +"%HH%MM%SS_%m-%d-%y")
 DataStoreEFProjectPath="EF/CatMash.DataStore.EF"
-MigrationIdFileName="GoodAngelDBContext+MigrationId.cs"
+MigrationIdFileName="CatmashDBContext+MigrationId.cs"
 MigrationIdFilePath=$DataStoreEFProjectPath/$MigrationIdFileName
 MigrationIdLinePrefix="public static readonly string MigrationId"
 
@@ -28,79 +28,99 @@ function UpdateMigrationId()
 
 function EFInit ()
 {
+    echo "** EFInit : Name ($1), Source Project ($2)"
+    
     name="$1"
     DBContextSourceProject="$2"
     MigrationPath=$DBContextSourceProject/Migrations
-
-    echo "$DBContextSourceProject claim migration Init $name"
-    echo "MigrationPath : $MigrationPath"
-
+    
+    echo "** EFInit : Delete migration path => $MigrationPath"
+    
     rm -rf $MigrationPath
     
     EFAdd "$name" $DBContextSourceProject
 }
 
 function EFAdd(){
+    echo "** EFAdd : Name ($1), Source Project ($2)"
+    
     name="$1"
     DBContextSourceProject="$2"
-    sourceProjectBasename=$(basename $DBContextSourceProject)
-    projectName=$(basename $DBContextSourceProject)".csproj"
-    projetPath=$DBContextSourceProject/$projectName
-    MigrationPath=$DBContextSourceProject/Migrations
-
-    echo "$DBContextSourceProject claim migration Add $name"
-
-    StartupProjectName=""
-    if [[ $DBContextSourceProject == *.Net ]]
-    then
-        StartupProjectName=$NetFramworkHelperProjectName
-    else
-        StartupProjectName=$sourceProjectBasename".Migrations.Helper.NetCore"
-    fi
-
-    echo "Startup project $StartupProjectName"
     
-    if [ ! -d $StartupProjectName ]; then
-        echo "Create $StartupProjectName project"
-        dotnet new console --name "$StartupProjectName"
-        dotnet add $StartupProjectName/$StartupProjectName.csproj package Microsoft.EntityFrameworkCore.Tools
+    sourceProjectBasename=$(basename $DBContextSourceProject)
+    echo "** EFAdd : Base name => $sourceProjectBasename"
+    
+    sourceProjectBaseDirectory=$(dirname $DBContextSourceProject)
+    echo "** EFAdd : Base directory => $sourceProjectBaseDirectory"
+    
+    projectName=$sourceProjectBasename".csproj"
+    echo "** EFAdd : Project name => $projectName"
+    
+    projetPath=$sourceProjectBaseDirectory/$sourceProjectBasename/$projectName
+    echo "** EFAdd : Project path => $projetPath"
 
+    StartupProjectName="Migrations.Helper.NetCore"
+#    if [[ $DBContextSourceProject == *.Net ]]
+#    then
+#        StartupProjectName=$NetFramworkHelperProjectName
+#    else
+#        StartupProjectName="Migrations.Helper.NetCore"
+#    fi
+    
+    StartupProjectDir=$sourceProjectBaseDirectory/$StartupProjectName
+    StartupProjectDirPath=$StartupProjectDir/$StartupProjectName.csproj
+    
+    echo "** EFAdd : Startup project $StartupProjectDirPath"
+    
+    if [ ! -d $StartupProjectDir ]; then
+        echo "** EFAdd : Create $StartupProjectDirPath"
+        
+        dotnet new console --name "$StartupProjectName" --output $StartupProjectDir
+        
+        dotnet add $StartupProjectDirPath package Microsoft.EntityFrameworkCore.Tools
+        dotnet add $StartupProjectDirPath package Microsoft.EntityFrameworkCore.Design
+        dotnet tool install --global dotnet-ef --version 3.0.0
+        
         if [[ $StartupProjectName == *"SQLServer"* ]]; then
-            dotnet add $StartupProjectName/$StartupProjectName.csproj package Microsoft.EntityFrameworkCore.SqlServer
+            dotnet add $StartupProjectDirPath package Microsoft.EntityFrameworkCore.SqlServer
         elif [[ $StartupProjectName == *"SQLite"* ]]; then
-            dotnet add $StartupProjectName/$StartupProjectName.csproj package Microsoft.EntityFrameworkCore.Sqlite
+            dotnet add $StartupProjectDirPath package Microsoft.EntityFrameworkCore.Sqlite
         fi
     fi
 
-    pushd $StartupProjectName
+#    pushd $projectDir
+#
+#    if [ ! -f ../$projetPath ]; then
+#        echo "** EFAdd : ../$projetPath not exist"
+#        exit
+#    else
+#        echo "** EFAdd : Add reference ../$projetPath"
+#        dotnet add reference ../$projetPath
+#    fi
+#    popd
 
-    if [ ! -f ../$projetPath ]; then
-        echo "../$projetPath not exist"
-        exit
-    else
-        dotnet add reference ../$projetPath
-    fi
-    popd
-
-    dotnet ef migrations add "$name" --project $DBContextSourceProject --startup-project $StartupProjectName/$StartupProjectName.csproj --verbose
+    dotnet add $StartupProjectDirPath reference $projetPath
+    
+    echo "Restore packages => dotnet restore $StartupProjectName/$StartupProjectName.csproj"
+    dotnet restore $StartupProjectDirPath
+    
+    echo "Restore start Migration => dotnet ef migrations add "$name" --project $DBContextSourceProject --startup-project $StartupProjectName/$StartupProjectName.csproj --verbose"
+    
+    dotnet ef migrations add "$name" --project $DBContextSourceProject --startup-project $StartupProjectDirPath --verbose
 }
 
 if [ -z "$Name" ]; then
     Name="AutoMigrate_$(whoami)_$Date"
 fi
 
-echo "Ef migration Helper $Command $Name"
-echo "DB Context project $DBContextSourceProject"
-
-echo "*****************"
+echo "******************************************************"
+echo "** Ef migration Helper $@"
 
 for TargetEfProject in ${TargetEfProjects[*]} 
 do
-    echo "Working on $TargetEfProject"
+    echo "** Working on $TargetEfProject"
 
     MigrationPath="$TargetEfProject/Migrations"
-
-    echo "Migration Path $MigrationPath"
 
     if [ -z "$Command" ]; then
         if [ ! -d "$MigrationPath" ]; then
@@ -109,8 +129,6 @@ do
             Command="Add"
         fi
     fi
-
-    echo "Using $Command"
 
     case "$Command" in
         "Init")
@@ -125,4 +143,5 @@ done
 
 UpdateMigrationId
 
+echo "******************************************************"
 bash MigrationTest.sh
