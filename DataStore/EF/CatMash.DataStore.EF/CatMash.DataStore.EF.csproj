@@ -10,5 +10,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\CatMash.DataStore\CatMash.DataStore.csproj" />
+    <ProjectReference Include="..\..\..\CatMash.Tools\CatMash.Tools.csproj" />
   </ItemGroup>
 </Project>

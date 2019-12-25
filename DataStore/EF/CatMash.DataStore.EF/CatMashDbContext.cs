@@ -17,14 +17,33 @@ namespace CatMash.DataStore.EF
 
         protected CatMashDbContext()
         {
+            Debug.WriteLine($"****** => Creating {GetType().Name}");
         }
 
         protected CatMashDbContext(DbContextOptions options) : base(options)
         {
+            Debug.WriteLine($"****** => Creating {GetType().Name}");
+        }
+
+        ~CatMashDbContext()
+        {
+            Debug.WriteLine($"****** => Destroying {GetType().Name}");
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+        }
+
+        public override void Dispose()
+        {
+            SaveChanges();
+            base.Dispose();
+        }
+
+        public override async ValueTask DisposeAsync()
+        {
+            await SaveChangesAsync();
+            await base.DisposeAsync();
         }
 
         public override int SaveChanges()
@@ -41,6 +60,8 @@ namespace CatMash.DataStore.EF
 
         void ProcessSaveChanges()
         {
+            Debug.WriteLine($"****** => {GetType().Name} : Save Changes");
+
             DateTime now = DateTime.UtcNow;
 
             var query = ChangeTracker.Entries().Where(p => (p.State == EntityState.Modified) || (p.State == EntityState.Added));
@@ -50,7 +71,7 @@ namespace CatMash.DataStore.EF
                 if (!(entrie.Entity is DBObject entity))
                     continue;
 
-                Debug.WriteLine($"=> DataStore Entity tracker : {entrie.Entity.GetType().Name} Entity {entrie.State}");
+                Debug.WriteLine($"****** => => DataStore Entity tracker : {entrie.Entity.GetType().Name} Entity {entrie.State}");
 
                 switch (entrie.State)
                 {
@@ -94,11 +115,11 @@ namespace CatMash.DataStore.EF
                     {
                         var startDate = DateTime.UtcNow;
 
-                        Debug.WriteLine($"Init {GetType().Name} : Begin");
+                        Debug.WriteLine($"****** => Init {GetType().Name} : Begin");
 
                         var result = InternalInit();
 
-                        Debug.WriteLine($"Init {GetType().Name} : End, duration ({(DateTime.UtcNow - startDate).ToString("mm':'ss':'fff")})");
+                        Debug.WriteLine($"****** => Init {GetType().Name} : End, duration ({(DateTime.UtcNow - startDate).ToString("mm':'ss':'fff")})");
 
                         IsInitialized = true;
 
@@ -136,13 +157,13 @@ namespace CatMash.DataStore.EF
                 }
                 else
                 {
-                    Debug.WriteLine($"Init {GetType().Name} : no migration needed");
+                    Debug.WriteLine($"****** => Init {GetType().Name} : no migration needed");
                     result = true;
                 }
             }
             catch (Exception e)
             {
-                Debug.WriteLine($"Init {GetType().Name} : Exception {e}");
+                Debug.WriteLine($"****** => Init {GetType().Name} : Exception {e}");
             }
 
             return result;
@@ -155,11 +176,11 @@ namespace CatMash.DataStore.EF
         {
             try
             {
-                Debug.WriteLine($"Init {GetType().Name} : Try Migrate");
+                Debug.WriteLine($"****** => Init {GetType().Name} : Try Migrate");
 
                 Database.Migrate();
 
-                Debug.WriteLine($"Init {GetType().Name} : Migrate Success");
+                Debug.WriteLine($"****** => Init {GetType().Name} : Migrate Success");
 
                 return true;
             }
@@ -168,12 +189,12 @@ namespace CatMash.DataStore.EF
                 /** NEVER Remove this condition, otherwise, the main sql server data business will be ERASED/REMOVED/DESTROYED */
                 if (GetType().Name == "SQLiteGoodAngelDbContext")
                 {
-                    Debug.WriteLine($"Init {GetType().Name} : Migrate failed {e} => try to delete");
+                    Debug.WriteLine($"****** => Init {GetType().Name} : Migrate failed {e} => try to delete");
 
                     var deleted = Database.EnsureDeleted();
 
                     if (!deleted)
-                        Debug.WriteLine($"Init {GetType().Name} : EnsureDeleted failed");
+                        Debug.WriteLine($"****** => Init {GetType().Name} : EnsureDeleted failed");
 
                     if (TryMigrateCount < TryMigrateMaxCount)
                     {
@@ -185,7 +206,7 @@ namespace CatMash.DataStore.EF
                 }
                 else
                 {
-                    Debug.WriteLine($"Init {GetType().Name} : Migrate failed {e} ");
+                    Debug.WriteLine($"****** => Init {GetType().Name} : Migrate failed {e} ");
                 }
             }
             return false;

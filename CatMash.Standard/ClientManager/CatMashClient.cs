@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CatMash.ClientManager
 {
-    public class CatMashClient
+    public class CatMashClient : TrackerObject
     {
         public event EventHandler Closed;
 
@@ -19,7 +19,7 @@ namespace CatMash.ClientManager
 
         public async Task Start()
         {
-            Debug.WriteLine($"Client Start");
+            Debug.WriteLine($"****** => Client Start");
 
             var buffer = new byte[1024 * 4];
             WebSocketReceiveResult result = null;

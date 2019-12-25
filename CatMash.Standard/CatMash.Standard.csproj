@@ -10,6 +10,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataStore\EF\SQLite\CatMash.DataStore.EF.SQLite\CatMash.DataStore.EF.SQLite.csproj" />
+    <ProjectReference Include="..\CatMash.Tools\CatMash.Tools.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Remove="cats.json" />

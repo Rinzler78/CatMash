@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CatMash.ClientManager
 {
-    public class CatMashClientManager : ICatMashClientManager
+    public class CatMashClientManager : TrackerObject, ICatMashClientManager
     {
         readonly List<CatMashClient> CatMashClients = new List<CatMashClient>();
 
@@ -42,7 +42,7 @@ namespace CatMash.ClientManager
                 client.Closed += Client_Closed;
                 CatMashClients.Add(client);
 
-                Debug.WriteLine($"Add client => {CatMashClients.Count}");
+                Debug.WriteLine($"****** => Add client => {CatMashClients.Count}");
 
                 return client;
             }
@@ -60,7 +60,7 @@ namespace CatMash.ClientManager
 
                     CatMashClients.Remove(client);
 
-                    Debug.WriteLine($"Remove client => {CatMashClients.Count}");
+                    Debug.WriteLine($"****** => Remove client => {CatMashClients.Count}");
                 }
             }
         }

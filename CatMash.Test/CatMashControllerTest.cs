@@ -73,7 +73,7 @@ namespace CatMash.Test
                 UInt32 testNumber = 0;
                 foreach (var test in testPlanList)
                 {
-                    Debug.WriteLine($"*********** {testNumber} ***********");
+                    Debug.WriteLine($"****** => *********** {testNumber} ***********");
 
                     var result = CatMashController.Rate(test.Item1, test.Item2);
 
@@ -82,7 +82,7 @@ namespace CatMash.Test
                     else
                         Assert.AreEqual(test.Item3, result);
 
-                    Debug.WriteLine($"*********** {testNumber++} ***********");
+                    Debug.WriteLine($"****** => *********** {testNumber++} ***********");
                 }
             }
             catch(Exception ex)

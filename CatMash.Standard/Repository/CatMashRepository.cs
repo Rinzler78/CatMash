@@ -15,7 +15,7 @@ using System.Diagnostics;
 
 namespace CatMash.Repository
 {
-    public class CatMashRepository : ICatMashRepository
+    public class CatMashRepository : TrackerObject, ICatMashRepository
     {
         readonly CatMashDbContext CatMashDbContext;
 
@@ -45,7 +45,7 @@ namespace CatMash.Repository
 
         public int Rate(string winnerId, string opponentId)
         {
-            Debug.WriteLine($"Rate : Winner ({winnerId}) <=> Opponent ({opponentId})");
+            Debug.WriteLine($"****** => Rate : Winner ({winnerId}) <=> Opponent ({opponentId})");
 
             CatMash.DataStore.Cat winnerCat, opponentCat;
 
@@ -64,9 +64,9 @@ namespace CatMash.Repository
                     ++winnerCat.NbMash;
                     ++opponentCat.NbMash;
 
-                    Debug.WriteLine($"Rate :\n- Winner ({winnerCat})\n- Opponent ({opponentCat})");
+                    Debug.WriteLine($"****** => Rate :\n- Winner ({winnerCat})\n- Opponent ({opponentCat})");
 
-                    CatMashDbContext.SaveChanges();
+                    //CatMashDbContext.SaveChanges();
 
                     return winnerCat.Rate;
                 }

@@ -34,7 +34,7 @@ namespace CatMash.DataStore.EF
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().Name} : {ex}");
+                    Debug.WriteLine($"****** => {System.Reflection.MethodBase.GetCurrentMethod().Name} : {ex}");
                 }
             }
 
@@ -58,7 +58,7 @@ namespace CatMash.DataStore.EF
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().Name} : {ex}");
+                    Debug.WriteLine($"****** => {System.Reflection.MethodBase.GetCurrentMethod().Name} : {ex}");
                 }
 
                 value = default(DateTime);
@@ -83,7 +83,7 @@ namespace CatMash.DataStore.EF
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().Name} : {ex}");
+                    Debug.WriteLine($"****** => {System.Reflection.MethodBase.GetCurrentMethod().Name} : {ex}");
                 }
 
                 value = default(Int32);
@@ -108,7 +108,7 @@ namespace CatMash.DataStore.EF
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().Name} : {ex}");
+                    Debug.WriteLine($"****** => {System.Reflection.MethodBase.GetCurrentMethod().Name} : {ex}");
                 }
 
                 value = default(Boolean);
@@ -134,7 +134,7 @@ namespace CatMash.DataStore.EF
                 }
                 catch (Exception ex)
                 {
-                    Debug.WriteLine($"{System.Reflection.MethodBase.GetCurrentMethod().Name} : {ex}");
+                    Debug.WriteLine($"****** => {System.Reflection.MethodBase.GetCurrentMethod().Name} : {ex}");
                 }
 
                 value = null;

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -16,10 +17,18 @@ namespace CatMash.Controllers
     {
         readonly ICatMashRepository CatsRepository;
         readonly ICatMashClientManager CatMashClientManager;
+
         public CatMashController(ICatMashRepository catsRepository, ICatMashClientManager catMashClientManager)
         {
+            Debug.WriteLine($"****** => Creating {GetType().Name}");
+
             CatsRepository = catsRepository;
             CatMashClientManager = catMashClientManager;
+        }
+
+        ~CatMashController()
+        {
+            Debug.WriteLine($"****** => Destroying {GetType().Name}");
         }
 
         public IActionResult Index()
@@ -32,7 +41,7 @@ namespace CatMash.Controllers
             return View();
         }
 
-        public async Task<IReadOnlyList<Cat>> AllCats()
+        public IReadOnlyList<Cat> AllCats()
         {
             return CatsRepository.Cats;
         }

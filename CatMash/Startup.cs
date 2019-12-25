@@ -22,8 +22,8 @@ namespace CatMash
     {
         public static void ConfigureCatMashServices(this IServiceCollection services, IConfiguration Configuration)
         {
-            services.AddSingleton<CatMashDbContext, CatMashSQLiteDbContext>(_ => new CatMashSQLiteDbContext());
-            services.AddSingleton<ICatMashRepository, CatMashRepository>();
+            services.AddTransient<CatMashDbContext, CatMashSQLiteDbContext>(_ => new CatMashSQLiteDbContext());
+            services.AddTransient<ICatMashRepository, CatMashRepository>();
             services.AddSingleton<ICatMashClientManager, CatMashClientManager>();
         }
 

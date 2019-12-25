@@ -16,5 +16,6 @@
   <ItemGroup>
     <ProjectReference Include="..\CatMash.Standard\CatMash.Standard.csproj" />
     <ProjectReference Include="..\CatMash\CatMash.csproj" />
+    <ProjectReference Include="..\CatMash.Tools\CatMash.Tools.csproj" />
   </ItemGroup>
 </Project>
