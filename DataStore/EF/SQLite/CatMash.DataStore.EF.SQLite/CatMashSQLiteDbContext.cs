@@ -9,7 +9,7 @@ namespace CatMash.DataStore.EF.SQLite
     {
         public static DbContextOptions GetOptions(this string dbPath)
         {
-            return SqliteDbContextOptionsBuilderExtensions.UseSqlite(new DbContextOptionsBuilder(), dbPath).Options;
+            return new DbContextOptionsBuilder().UseSqlite(dbPath).Options;
         }
     }
 

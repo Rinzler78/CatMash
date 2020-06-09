@@ -42,7 +42,6 @@ function updateCatsImages()
         if(cats.length > 1)
         {
             leftCatIndex = generateIndex(leftCatIndex);
-
             rightCatIndex = generateIndex(leftCatIndex);
         }
 
@@ -57,9 +56,10 @@ function updateCatsImages()
     }
 }
 
-function setCatImage(imageId, src, alt){
-    document.getElementById(imageId).src = src;
-    document.getElementById(imageId).alt = alt;
+function setCatImage(imageId, src, alt) {
+    var img = document.getElementById(imageId);
+    img.src = src;
+    img.alt = alt;
 }
 
 function setImagesEventListener(imageId){
